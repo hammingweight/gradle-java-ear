@@ -6,13 +6,18 @@ This project contains a root project that builds an EAR. There are two sub-proje
 to build an EJB JAR and a WAR.
 
 To build the project run
+
     gradle build
+
 or
+
     gradle ear
+
 
 The resultant EAR will be generated in the build/libs directory.
 
 The EAR file can be deployed to a Java EE Application Server. To access the
 servlet using a default configuration, point your browser to
+
     http://<glassfish_ip:8080>/war/DisplayServlet
 
