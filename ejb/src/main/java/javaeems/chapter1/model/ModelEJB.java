@@ -5,21 +5,19 @@ import java.net.URLDecoder;
 import java.util.List;
 import javax.ejb.*;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceUnit;
+import javax.persistence.PersistenceContext;
 
 
 @Stateful
 public class ModelEJB {
-    @PersistenceUnit
-   private EntityManagerFactory emf;
+    @PersistenceContext(unitName = "HelloEJBJPA_TRUE_MVC_JavaEE-ejbPU")
+   private EntityManager em;
     
     public void putUserMessage(String messageString) throws MessageException {
         this.deleteMessage();
         try {
             String decodedMessage = URLDecoder.decode(messageString, "UTF-8");
             Message message = new Message("1", "(" + messageString + ")" + " in a DB");
-            EntityManager em = emf.createEntityManager();
             em.persist(message);
         } catch (UnsupportedEncodingException uee ) {
             throw new MessageException("something odd about that message..." + messageString);
@@ -27,7 +25,6 @@ public class ModelEJB {
     }
     
     public String getStoredMessage() throws MessageException {
-        EntityManager em = emf.createEntityManager();
         List messages = em.createNamedQuery("findMessages").getResultList();
         if (messages.size() > 0) {
             Message message = (Message) messages.get(0);
@@ -38,7 +35,6 @@ public class ModelEJB {
     }
     
     public void deleteMessage() {
-        EntityManager em = emf.createEntityManager();
         em.createNamedQuery("deleteMessages").executeUpdate();
     }
     
