@@ -16,7 +16,8 @@ public class ModelEJB {
     public void putUserMessage(String messageString) throws MessageException {
         this.deleteMessage();
         try {
-            String decodedMessage = URLDecoder.decode(messageString, "UTF-8");
+            @SuppressWarnings("unused")
+			String decodedMessage = URLDecoder.decode(messageString, "UTF-8");
             Message message = new Message("1", "(" + messageString + ")" + " in a DB");
             em.persist(message);
         } catch (UnsupportedEncodingException uee ) {
@@ -25,7 +26,8 @@ public class ModelEJB {
     }
     
     public String getStoredMessage() throws MessageException {
-        List messages = em.createNamedQuery("findMessages").getResultList();
+        @SuppressWarnings("rawtypes")
+		List messages = em.createNamedQuery("findMessages").getResultList();
         if (messages.size() > 0) {
             Message message = (Message) messages.get(0);
             return "(" + message.getMessageString() + "), inside an EJB";

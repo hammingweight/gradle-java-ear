@@ -2,4 +2,5 @@ build/
 .gradle/
 .project
 .settings/
-
+ejb/.classpath
+war/.classpath
