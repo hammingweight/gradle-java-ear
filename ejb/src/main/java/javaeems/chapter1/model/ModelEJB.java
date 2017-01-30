@@ -11,7 +11,7 @@ import javax.persistence.PersistenceContext;
 @Stateful
 public class ModelEJB {
     @PersistenceContext(unitName = "HelloEJBJPA_TRUE_MVC_JavaEE-ejbPU")
-   private EntityManager em;
+    EntityManager em;
     
     public void putUserMessage(String messageString) throws MessageException {
         this.deleteMessage();
