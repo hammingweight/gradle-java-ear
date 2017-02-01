@@ -34,4 +34,5 @@ dependencies {
     // 'test.useTestNG()' to your build script.
     testCompile 'junit:junit:4.12'
     testCompile group: 'org.eclipse.persistence', name: 'eclipselink', version: '2.5.0'
+    testCompile group: 'org.apache.derby', name: 'derby', version: '10.13.1.1'
 }
