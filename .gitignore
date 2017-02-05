@@ -3,4 +3,5 @@ build/
 .project
 .settings/
 ejb/.classpath
+ejb/derby.log
 war/.classpath

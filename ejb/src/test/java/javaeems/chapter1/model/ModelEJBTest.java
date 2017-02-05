@@ -1,6 +1,9 @@
 package javaeems.chapter1.model;
 
+import static org.junit.Assert.*;
+
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
 import org.junit.After;
@@ -16,7 +19,7 @@ public class ModelEJBTest {
 	@Before
 	public void setUp() {
 		ejb = new ModelEJB();
-		emf = Persistence.createEntityManagerFactory("foobar");
+		emf = Persistence.createEntityManagerFactory("ejb-tests-pu");
 		ejb.em = emf.createEntityManager();
 	}
 	
@@ -35,4 +38,17 @@ public class ModelEJBTest {
 		ejb.getStoredMessage();
 	}
 
+	@Test
+	public void testSetAndGet() throws MessageException {
+		EntityTransaction tx = ejb.em.getTransaction();
+		try {
+			tx.begin();
+			ejb.putUserMessage("hello");
+			ejb.putUserMessage("some statistically improbable phrase");
+		} finally {
+			tx.commit();
+		}
+		String message = ejb.getStoredMessage();
+		assertTrue(message.contains("some statistically improbable phrase"));
+	}
 }
