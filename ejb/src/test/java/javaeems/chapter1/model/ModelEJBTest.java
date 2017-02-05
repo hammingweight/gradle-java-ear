@@ -48,6 +48,8 @@ public class ModelEJBTest {
 		} finally {
 			tx.commit();
 		}
+		long numEntries = (long) ejb.em.createQuery("select count(m) from Message m").getSingleResult();
+		assertEquals(1, numEntries);
 		String message = ejb.getStoredMessage();
 		assertTrue(message.contains("some statistically improbable phrase"));
 	}
