@@ -26,13 +26,20 @@ public class ModelEJBTest {
 	@After
 	public void tearDown() {
 		if (ejb.em != null) {
+			EntityTransaction tx = ejb.em.getTransaction();
+			try {
+				tx.begin();
+				ejb.em.createQuery("delete from Message").executeUpdate();
+			} finally {
+				tx.commit();
+			}
 			ejb.em.close();
 		}
 		if (emf != null) {
 			emf.close();
 		}
 	}
-	
+
 	@Test(expected=MessageException.class)
 	public void testNothingInDB() throws MessageException {
 		ejb.getStoredMessage();
@@ -52,5 +59,27 @@ public class ModelEJBTest {
 		assertEquals(1, numEntries);
 		String message = ejb.getStoredMessage();
 		assertTrue(message.contains("some statistically improbable phrase"));
+	}
+
+	@Test
+	public void testSetAndDelete() throws MessageException {
+		assertEquals(0, (long) ejb.em.createQuery("select count(m) from Message m").getSingleResult());
+
+		EntityTransaction tx = ejb.em.getTransaction();
+		try {
+			tx.begin();
+			ejb.putUserMessage("hello");
+		} finally {
+			tx.commit();
+		}
+		assertEquals(1, (long) ejb.em.createQuery("select count(m) from Message m").getSingleResult());
+		
+		try {
+			tx.begin();
+			ejb.deleteMessage();
+		} finally {
+			tx.commit();
+		}
+		assertEquals(0, (long) ejb.em.createQuery("select count(m) from Message m").getSingleResult());
 	}
 }
